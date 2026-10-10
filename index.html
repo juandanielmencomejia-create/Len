@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Para Len · Un pequeño universo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap');
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#070611;color:#fff;font-family:Montserrat,sans-serif;overflow-x:hidden}
+canvas{position:fixed;inset:0;z-index:-3}.aurora{position:fixed;inset:-30%;z-index:-2;pointer-events:none;background:radial-gradient(circle at 30% 35%,#a63f8b22,transparent 28%),radial-gradient(circle at 70% 65%,#5c55b822,transparent 30%);filter:blur(35px);animation:aurora 12s ease-in-out infinite alternate}
+section{min-height:100vh;padding:80px 7%;display:flex;align-items:center;justify-content:center;position:relative}
+.hero{text-align:center}.tiny{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:#c8bfd3}
+.hero h1{font:500 clamp(80px,18vw,220px)/.72 "Cormorant Garamond";letter-spacing:-8px;margin:35px 0 30px;background:linear-gradient(100deg,#fff,#e9b8da,#fff,#a9a3e8,#fff);background-size:400%;color:transparent;background-clip:text;-webkit-background-clip:text;animation:shine 9s linear infinite}
+.hero .sub{max-width:600px;margin:auto;color:#c9c0ce;line-height:1.9;font-size:15px}.enter{margin-top:42px;border:1px solid #ffffff2b;background:#ffffff08;color:white;border-radius:50px;padding:15px 26px;cursor:pointer;letter-spacing:2px;text-transform:uppercase;font-size:10px;transition:.35s}.enter:hover{background:#ffffff18;transform:translateY(-3px);box-shadow:0 10px 50px #d66ca422}
+.scroll{position:absolute;bottom:25px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:3px;color:#807788}
+.wrap{width:min(980px,100%)}.label{font-size:10px;letter-spacing:4px;color:#d998c4;text-transform:uppercase}.title{font:500 clamp(45px,8vw,90px)/.95 "Cormorant Garamond";margin:15px 0 30px}.text{color:#bfb5c7;line-height:2;font-size:15px;max-width:750px}
+.glass{border:1px solid #ffffff12;background:#ffffff06;backdrop-filter:blur(16px);border-radius:35px;padding:45px;box-shadow:0 30px 100px #0008}
+.words{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:35px}.word{padding:28px;border-radius:22px;background:#ffffff05;border:1px solid #ffffff0e;transition:.4s}.word:hover{transform:translateY(-7px);background:#ffffff0a}.word b{font:500 30px "Cormorant Garamond";display:block;margin-bottom:10px}.word span{font-size:12px;color:#9d92a7;line-height:1.7}
+.letter{font:400 clamp(26px,4vw,44px)/1.5 "Cormorant Garamond";color:#eee;max-width:780px}.letter em{color:#efabd0;font-style:normal}.signature{margin-top:25px;color:#887c91;font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}.moment{min-height:230px;padding:28px;border-radius:25px;background:linear-gradient(145deg,#171323,#0e0b15);border:1px solid #ffffff10;position:relative;overflow:hidden}.moment:after{content:"✦";position:absolute;right:20px;top:15px;color:#d99ac1;font-size:20px}.moment h3{font:500 27px "Cormorant Garamond";margin-top:80px}.moment p{font-size:11px;line-height:1.7;color:#9d94a5}
+.secret{text-align:center}.lock{font-size:48px;margin-bottom:20px}.secret button{border:1px solid #efabd055;background:#efabd00d;color:#ffd9ed;padding:16px 28px;border-radius:50px;cursor:pointer;transition:.3s}.secret button:hover{background:#efabd01a;transform:scale(1.04)}#secretText{max-width:700px;margin:30px auto 0;display:none;font:400 clamp(25px,4vw,42px)/1.5 "Cormorant Garamond";color:#eee}.final{text-align:center;position:relative}.risk-corner{position:absolute;right:22px;bottom:24px;color:#6e6675;text-decoration:none;font-size:8px;letter-spacing:1px;opacity:.65;transition:.3s}.risk-corner:hover{color:#d59abb;opacity:1}.final h2{font:500 clamp(55px,10vw,110px)/.85 "Cormorant Garamond";margin:20px 0}.final p{color:#a69baa;max-width:600px;margin:auto;line-height:2;font-size:13px}
+footer{text-align:center;padding:45px;color:#60586a;font-size:9px;letter-spacing:3px}
+
+.risk-note{margin-top:34px;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#62586b;opacity:.65}.float{position:fixed;pointer-events:none;z-index:20;font-size:18px;animation:floatup 2.2s ease-out forwards}
+.conf{position:fixed;width:7px;height:12px;z-index:20;pointer-events:none;animation:fall 3s ease-out forwards}
+
+@keyframes shine{to{background-position:400% center}}@keyframes aurora{to{transform:translate(5%,4%) scale(1.08)}}@keyframes floatup{0%{opacity:0;transform:translate(0,0) scale(.5)}15%{opacity:1}100%{opacity:0;transform:translate(var(--x),-180px) scale(1.4) rotate(25deg)}}@keyframes fall{to{transform:translate(var(--x),110vh) rotate(700deg);opacity:0}}
+@media(max-width:700px){section{padding:70px 20px}.glass{padding:28px 20px}.words,.timeline{grid-template-columns:1fr}.hero h1{letter-spacing:-4px}}
+
+#intro{position:fixed;inset:0;z-index:9999;background:#05040c;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1.2s,visibility 1.2s}.intro-kicker{font-size:9px;letter-spacing:6px;color:#9e91a8;animation:fadeUp 1.2s both}.intro-title{font:500 clamp(70px,15vw,170px)/.8 "Cormorant Garamond";margin:28px 0;background:linear-gradient(110deg,#fff,#eaaed0,#fff);color:transparent;background-clip:text;-webkit-background-clip:text;animation:introTitle 2s both}.intro-title span{font-style:italic}.intro-line{height:1px;width:0;background:linear-gradient(90deg,transparent,#e5a9ce,transparent);animation:lineIn 1.4s .8s forwards}.intro-btn{margin-top:35px;padding:15px 28px;border-radius:50px;border:1px solid #ffffff25;background:#ffffff08;color:#fff;letter-spacing:3px;font-size:9px;cursor:pointer;transition:.35s}.intro-btn:hover{transform:scale(1.06);background:#ffffff14;box-shadow:0 0 50px #df8fc433}.intro-orb{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,#d879b133,transparent 65%);filter:blur(15px);animation:orb 5s ease-in-out infinite;pointer-events:none}#cursorGlow{position:fixed;width:180px;height:180px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,#d888b512,transparent 70%);transform:translate(-50%,-50%);mix-blend-mode:screen}.hero,.glass,.moment,.word{transform-style:preserve-3d}.revealOn{opacity:0;transform:translateY(45px);transition:1s cubic-bezier(.2,.7,.2,1)}.revealOn.visible{opacity:1;transform:none}.spark{position:fixed;pointer-events:none;color:#fff;z-index:100;animation:spark .9s ease-out forwards}.musicButton{position:fixed;right:18px;bottom:18px;z-index:100;border:1px solid #ffffff18;background:#ffffff0b;backdrop-filter:blur(10px);color:#d9c7da;border-radius:50px;padding:11px 15px;font-size:9px;letter-spacing:2px;cursor:pointer}.musicButton:hover{background:#ffffff16}.pulse{animation:pulse 2s infinite}.tilt{transition:transform .15s ease}.letter em{display:inline-block;animation:softGlow 3s ease-in-out infinite}.moment:hover,.word:hover{box-shadow:0 20px 50px #0008,0 0 30px #d789b414}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}@keyframes introTitle{from{opacity:0;transform:scale(.8);filter:blur(12px)}to{opacity:1;transform:none;filter:none}}@keyframes lineIn{to{width:240px}}@keyframes orb{50%{transform:scale(1.35);opacity:.65}}@keyframes spark{to{opacity:0;transform:translate(var(--sx),var(--sy)) scale(.2) rotate(180deg)}}@keyframes pulse{50%{box-shadow:0 0 0 9px #e99ac000,0 0 25px #e99ac044}}@keyframes softGlow{50%{text-shadow:0 0 20px #eeafd966}}
+
+.danger-zone{background:radial-gradient(circle at center,#2a0d1f 0,#100812 42%,#070611 80%);min-height:100vh;text-align:center}.secret-secret{max-width:900px}.secret-secret h2{font:500 clamp(26px,4vw,42px) "Cormorant Garamond";margin:10px 0 7px}.warning{color:#756b79;font-size:8px;letter-spacing:1px;margin-bottom:18px;opacity:.7}.secret-secret button{border:1px solid #ef6eae66;background:#ef6eae08;color:#d9b6c9;border-radius:50px;padding:9px 17px;font-size:11px;cursor:pointer;transition:.4s}.secret-secret button:hover{background:#ef6eae22;box-shadow:0 0 50px #ef6eae22;transform:scale(1.04)}.dangerText{display:none;text-align:left;margin:35px auto 0;color:#d5ccd8;font:400 18px/2 "Cormorant Garamond";max-width:780px;animation:reveal .9s ease}.dangerText p{margin:0 0 25px}.dangerText em{color:#f2a5ca;font-style:normal}.dangerText .last-line{text-align:center;color:#f4b1d0;font-size:30px}.danger-open{box-shadow:inset 0 0 140px #ff4c9a14}.danger-open #dangerText{display:block}@keyframes reveal{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:none}}
+
+/* ===== MOBILE / RESPONSIVE OPTIMIZATION ===== */
+html{font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden}
+body{min-width:0;width:100%;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+img,video,iframe{max-width:100%;height:auto}
+button,a{touch-action:manipulation}
+section{min-height:100svh;min-height:100dvh;padding:clamp(56px,8vw,90px) clamp(16px,5vw,7%)}
+.wrap{width:100%;max-width:980px;margin:0 auto}
+.glass{width:100%;max-width:100%;padding:clamp(24px,5vw,45px);border-radius:clamp(22px,5vw,35px)}
+.hero h1{font-size:clamp(72px,22vw,220px);letter-spacing:clamp(-5px,-1.5vw,-8px);line-height:.78;margin:clamp(24px,7vw,35px) 0 22px}
+.hero .sub{width:min(92vw,600px);font-size:clamp(12px,3.5vw,15px);line-height:1.8}
+.tiny{font-size:clamp(8px,2.5vw,11px);letter-spacing:clamp(2px,1.2vw,5px)}
+.enter,.intro-btn{min-height:46px;padding:13px 21px;font-size:10px}
+.scroll{bottom:max(18px,env(safe-area-inset-bottom));font-size:8px}
+.label{font-size:9px;letter-spacing:2.5px;line-height:1.5}
+.title{font-size:clamp(38px,11vw,90px);line-height:.98;margin:12px 0 24px;overflow-wrap:anywhere}
+.text{font-size:clamp(13px,3.8vw,15px);line-height:1.85;max-width:none}
+.words,.timeline{grid-template-columns:1fr;gap:12px;margin-top:25px}
+.word{padding:22px 20px;border-radius:18px}
+.word b{font-size:28px;margin-bottom:7px}
+.word span{font-size:11px;line-height:1.65}
+.letter{font-size:clamp(22px,6vw,44px);line-height:1.45;max-width:none}
+.signature{font-size:9px;letter-spacing:1.5px;line-height:1.6}
+.moment{min-height:0;padding:23px 20px;border-radius:19px}
+.moment h3{font-size:28px;margin-top:45px;margin-bottom:10px}
+.moment p{font-size:11px;line-height:1.7}
+.secret .lock{font-size:38px;margin-bottom:12px}
+.secret button,.secret-secret button{min-height:44px;padding:11px 20px}
+#secretText{font-size:clamp(22px,6vw,42px);line-height:1.45;margin-top:24px}
+.final{padding-left:20px;padding-right:20px}
+.final h2{font-size:clamp(54px,16vw,110px);line-height:.9;overflow-wrap:anywhere}
+.final p{font-size:12px;line-height:1.85;max-width:90vw}
+.risk-corner{right:max(12px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));font-size:7px;letter-spacing:.7px;padding:8px}
+footer{padding:35px 18px;font-size:7px;letter-spacing:2px;line-height:1.7}
+#intro{padding:20px;text-align:center;min-height:100svh;min-height:100dvh}
+.intro-kicker{font-size:8px;letter-spacing:4px}
+.intro-title{font-size:clamp(64px,20vw,170px);margin:25px 0;line-height:.82}
+.intro-line{max-width:70vw}
+.intro-orb{width:170px;height:170px}
+#cursorGlow{display:none}
+.musicButton{right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));padding:9px 12px;font-size:8px;max-width:120px}
+.danger-zone{padding-top:70px;padding-bottom:70px}
+.secret-secret{width:100%;max-width:900px}
+.secret-secret h2{font-size:clamp(30px,8vw,42px)}
+.warning{font-size:7px;line-height:1.6}
+.dangerText{font-size:clamp(17px,5vw,20px);line-height:1.8;margin-top:28px}
+.dangerText p{margin-bottom:21px}
+.dangerText .last-line{font-size:clamp(25px,7vw,30px);line-height:1.25}
+@media (max-width:380px){
+  section{padding-left:15px;padding-right:15px}
+  .glass{padding:21px 17px}
+  .hero h1{font-size:clamp(66px,22vw,90px)}
+  .hero .sub{font-size:11px}
+  .enter{font-size:9px;letter-spacing:1.5px}
+  .title{font-size:36px}
+  .letter{font-size:21px}
+  .musicButton{font-size:7px;padding:8px 10px}
+}
+@media (min-width:701px) and (max-height:650px){
+  section{min-height:100vh;padding-top:45px;padding-bottom:45px}
+}
+@media (hover:none){
+  .moment:hover,.word:hover{transform:none;box-shadow:none}
+  .enter:hover,.intro-btn:hover,.secret button:hover,.secret-secret button:hover{transform:none}
+  .tilt{transform:none!important}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body>
+<div id="intro"><div class="intro-orb"></div><div class="intro-kicker">UNA PEQUEÑA SORPRESA</div><div class="intro-title">Para <span>Len</span></div><div class="intro-line"></div><button class="intro-btn" onclick="enterUniverse()">Abrir regalo ✦</button></div><div id="cursorGlow"></div>
+<button class="musicButton" id="musicButton" onclick="toggleMusic()">♪ SONIDO</button><canvas id="sky"></canvas><div class="aurora"></div>
+
+<section class="hero">
+<div>
+<div class="tiny">09 · 10 · Un día especial</div>
+<h1>Len</h1>
+<p class="sub">Hay personas que llegan a tu vida y simplemente pasan.<br>Y hay otras que, sin darse cuenta, empiezan a ocupar un lugar diferente.</p>
+<button class="enter" onclick="go()">Entrar a este pequeño universo ↓</button>
+</div>
+<div class="scroll">desliza</div>
+</section>
+
+<section id="story">
+<div class="wrap">
+<div class="label">Hoy es tu día · y quería que se sintiera diferente</div>
+<div class="title">Hoy todo esto es para ti.</div>
+<div class="glass">
+<p class="text">Hoy es tu cumpleaños. Tu día. Y quería que, por un momento, todo girara alrededor de una sola persona: tú. Entre todas las formas que existen de decir “feliz cumpleaños”, me pareció más bonito hacerte un pequeño lugar aquí, algo que pudieras abrir y sentir como un detalle pensado realmente para ti. No porque tenga que significar algo enorme, sino porque <b>tú sí significas algo especial</b> para mí.</p>
+<p class="text">Y no quería que tu cumpleaños quedara reducido a un simple “feliz cumpleaños” y ya. Hay días que merecen un poquito más de tiempo, más intención y más cariño. Hoy es uno de esos días, porque es el día en que nació alguien que, con el tiempo, terminó convirtiéndose en una persona importante para mí.</p>
+<p class="text">A veces uno no necesita ponerle nombre a una conexión para saber que existe. Basta con disfrutar las conversaciones, las risas, los momentos inesperados y esa sensación de que conocer a alguien fue una de esas casualidades que uno termina agradeciendo. Y creo que hay algo bonito en eso: en dejar que una conexión sea especial sin tener que explicarla todo el tiempo.</p>
+<p class="text">Hay personas con las que uno puede hablar durante horas y otras con las que simplemente se siente cómodo estando. Hay personas que llegan haciendo ruido y otras que, poco a poco, terminan dejando una huella sin darse cuenta. Tú, de alguna manera, terminaste siendo de esas personas que uno quiere conservar cerca, disfrutar y seguir conociendo.</p>
+<div class="words">
+<div class="word"><b>Risas</b><span>Porque siempre hay espacio para una más, incluso en los días raros.</span></div>
+<div class="word"><b>Confianza</b><span>De esas conexiones que se sienten naturales y no necesitan forzarse.</span></div>
+<div class="word"><b>Casualidad</b><span>Porque algunas de las mejores personas aparecen sin que uno las esté buscando.</span></div>
+<div class="word"><b>Complicidad</b><span>Esas pequeñas cosas que quizá nadie más entiende, pero que hacen especial una conversación.</span></div>
+<div class="word"><b>Tranquilidad</b><span>La sensación de poder ser uno mismo sin tener que estar pensando demasiado qué decir.</span></div>
+<div class="word"><b>Admiración</b><span>Porque hay cosas de ti que merecen ser reconocidas, incluso cuando tú no las notes.</span></div>
+<div class="word"><b>Apoyo</b><span>Estar para celebrar lo bueno y también para recordar que los días difíciles pasan.</span></div>
+<div class="word"><b>Curiosidad</b><span>Las ganas de seguir descubriendo historias, gustos, ideas y versiones de ti.</span></div>
+<div class="word"><b>Momentos</b><span>Porque al final son esas pequeñas cosas las que terminan convirtiéndose en recuerdos grandes.</span></div>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="label">Una carta que no necesitaba papel</div>
+<div class="title">Para ti, Len.</div>
+<div class="letter">
+Quería que hoy tuvieras algo diferente. Algo que pudieras abrir y pensar:
+<em>“¿Este loco hizo todo esto por mi cumpleaños?”</em> 😂<br><br>
+La respuesta es sí. Y probablemente también pensé demasiado en cómo hacerla, pero bueno… ya estamos aquí.
+<br><br>
+No quería hacerte el típico mensaje copiado de cumpleaños que podría mandarse a cualquier persona. Quería que esto tuviera un poquito de nosotros, de las conversaciones, de las risas, de las cosas que hemos ido compartiendo y, sobre todo, de ese lugar especial que has ido ganando sin que ninguno tuviera que planearlo.
+<br><br>
+Porque me alegra haberte conocido. Me gusta poder hablar contigo, molestarte, reírme contigo, conocer pequeñas partes de tu mundo y descubrir poco a poco quién eres. Y sí, también me gusta esa sensación de no saber exactamente qué va a salir de una conversación contigo, porque muchas veces termina siendo mejor de lo que esperaba.
+<br><br>
+No quiero ponerle una etiqueta a esto ni escribir algo que suene a promesa. Me gusta más dejarlo ser lo que es: <em>algo bonito, genuino y especial</em>. Algo que no necesita correr para tener valor.
+<br><br>
+Así que hoy simplemente quiero desearte un año lleno de cosas que te hagan bien. Que tengas tranquilidad cuando la necesites, fuerza cuando las cosas se pongan difíciles, personas que te quieran de verdad, momentos que te hagan reír hasta que te duela la cara y sueños que poco a poco dejen de ser sueños para convertirse en recuerdos.
+<br><br>
+Y si puedo pedir una cosa para este nuevo año, sería sencilla: que sigamos coincidiendo. Que sigan existiendo conversaciones que duren más de lo planeado, momentos que nos den risa después y recuerdos que algún día podamos mirar y decir <em>“qué bueno que pasó”</em>.
+<br><br>
+Porque sí, Len: <em>eres una persona muy especial para mí.</em> Y aunque quizá no haya una palabra exacta para explicar todo lo que eso significa, creo que no hace falta. Hay cosas que simplemente se sienten y se cuidan.
+</div>
+<div class="signature">Hecho especialmente para ti · con cariño</div>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="label">Porque tu cumpleaños merece más que una sola frase</div>
+<div class="title">Que este nuevo año te regale muchísimo.</div>
+<div class="timeline">
+<div class="moment"><h3>Un año para ti</h3><p>Que este nuevo capítulo tenga momentos que se sientan tan especiales como este día merece ser.</p></div>
+<div class="moment"><h3>Momentos que recordar</h3><p>De esos que años después aparecen en una conversación y todavía hacen sonreír.</p></div>
+<div class="moment"><h3>Personas que sumen</h3><p>Gente que te cuide, te respete, te haga reír y celebre tus logros contigo.</p></div>
+<div class="moment"><h3>Sueños cumplidos</h3><p>Que aquello que hoy parece lejano termine convirtiéndose en algo que puedas tocar.</p></div>
+<div class="moment"><h3>Calma</h3><p>Que incluso en medio del caos encuentres espacios donde puedas respirar, descansar y sentirte en paz.</p></div>
+<div class="moment"><h3>Pequeñas victorias</h3><p>Porque no todo tiene que ser enorme para ser importante. También cuentan esos pasos que nadie ve.</p></div>
+<div class="moment"><h3>Más historias</h3><p>Y ojalá algunas de ellas tengan un poquito de nuestras conversaciones, nuestras risas y nuestras locuras.</p></div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="wrap secret">
+<div class="label">Hay una última cosa</div>
+<div class="lock">✦</div>
+<div class="title">No la abras si no quieres sonreír.</div>
+<button onclick="secret()">Abrir mensaje secreto</button>
+<div id="secretText">“No sé exactamente qué nos depare el futuro, pero sí sé que me alegra muchísimo coincidir contigo. Y si la vida decidió cruzarnos, espero que todavía nos tenga guardadas muchas conversaciones, muchas risas y muchos momentos que todavía no conocemos. Feliz cumpleaños, Len. 💗”</div>
+</div>
+</section>
+
+
+
+<section class="final">
+<div>
+<div class="tiny">Fin de este pequeño universo</div>
+<h2>Feliz cumpleaños.</h2>
+<p>Hoy fue tu día. Un día para celebrarte, para recordarte lo mucho que vales y para desear que todo lo bonito que mereces encuentre la manera de llegar a ti.</p>
+<p style="margin-top:25px;color:#d49abb">Que este nuevo año te encuentre rodeada de cariño, de sueños, de risas y de personas que sepan valorar la persona increíble que eres. ✦</p>
+<p style="margin-top:25px;color:#8f8498">Gracias por existir, por coincidir y por hacer que este día también se sintiera especial para alguien más.</p>
+</div>
+<a class="risk-corner" href="#danger" onclick="setTimeout(()=>openDanger(),120)">bajo tu propio riesgo · ✦</a>
+</section>
+
+<section class="danger-zone" id="danger">
+<div class="wrap secret-secret">
+<h2>Ahora sí, Len...</h2>
+<p class="warning">Esto quedó después del cumpleaños por una razón.</p>
+<button onclick="openDanger()">Abrir</button>
+<div id="dangerText" class="dangerText">
+<p>Len, aquí sí me voy a permitir decirte cosas que normalmente uno piensa y se guarda.</p>
+<p>Me encanta cómo eres. Me encanta tu forma de ser, tu manera de hablar y esas pequeñas cosas que probablemente tú ni notas, pero que alguien que te presta atención termina queriendo muchísimo. Me gusta tu personalidad, tu esencia y esa forma tuya de hacer que una conversación cualquiera pueda convertirse en un momento que uno quiere repetir.</p>
+<p>Me gusta tenerte cerca. Me gusta conocerte. Me gusta descubrir poco a poco todas esas partes de ti que hacen que seas tú y no otra persona. Y sí, <em>me gustas muchísimo como persona</em>. De esas veces en las que uno piensa: “qué bonito haber coincidido con alguien así”.</p>
+<p>Y si algún día me preguntaran con quién podría imaginar algo realmente bonito, algo de esos vínculos que uno cuida durante años, te soy sincero: <em>serías de las primeras personas que me vendrían a la cabeza.</em> Si algún día tuviera que elegir a alguien con quien compartir una vida, construir un hogar, casarme y mirar atrás pensando “elegí bien”, no me costaría imaginarte a ti en ese lugar.</p>
+<p>No porque quiera correr hacia el futuro ni porque necesitemos ponerle un nombre a lo que tenemos ahora. Me gusta que las cosas sean como son y que cada momento llegue a su tiempo. Pero eso no quita que exista ese pensamiento bonito de <em>“ojalá la vida me permita seguir coincidiendo contigo durante muchísimo tiempo”.</em></p>
+<p>También te extraño más de lo que probablemente digo. Hay momentos en los que algo me recuerda a ti y automáticamente apareces en mi cabeza. Uno puede acostumbrarse a hablar con alguien, a contarle cosas, a buscar su mensaje... hasta que un día se da cuenta de que esa persona ya forma parte de sus pequeños pensamientos cotidianos.</p>
+<p>Así que sí: te admiro, te quiero muchísimo como persona, me encantas tal y como eres y me alegra tenerte en mi vida. Y si algún día lees esto y te preguntas si lo escribí en serio...</p>
+<p class="last-line">Sí. Absolutamente en serio. 💗</p>
+</div>
+</div>
+</section>
+<footer>HECHO CON CÓDIGO, DESVELO Y UN POQUITO DE CARIÑO · PARA LEN</footer>
+
+<script>
+const c=document.getElementById('sky'),x=c.getContext('2d');let stars=[];
+function resize(){const d=Math.min(devicePixelRatio||1,1.5);c.width=innerWidth*d;c.height=innerHeight*d;x.setTransform(d,0,0,d,0,0);stars=Array.from({length:innerWidth<600?90:170},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.4+.2,a:Math.random()*6,s:Math.random()*.35+.05}))}
+function draw(){x.clearRect(0,0,innerWidth,innerHeight);stars.forEach(s=>{s.y-=s.s;if(s.y<0)s.y=innerHeight;s.a+=.01;x.globalAlpha=.2+.45*Math.abs(Math.sin(s.a));x.fillStyle='#fff';x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fill()});requestAnimationFrame(draw)}
+resize();addEventListener('resize',resize);draw();
+
+function go(){document.getElementById('story').scrollIntoView({behavior:'smooth'});burst(30)}
+function secret(){let t=document.getElementById('secretText');t.style.display='block';burst(100);for(let i=0;i<20;i++)setTimeout(heart,i*60)}
+function heart(){let e=document.createElement('i');e.className='float';e.textContent=['💗','✨','💕','🌙','✦'][Math.floor(Math.random()*5)];e.style.left=(20+Math.random()*60)+'vw';e.style.top=(55+Math.random()*25)+'vh';e.style.setProperty('--x',(Math.random()*220-110)+'px');document.body.appendChild(e);setTimeout(()=>e.remove(),2300)}
+function burst(n){for(let i=0;i<n;i++){let e=document.createElement('i');e.className='conf';e.style.left=Math.random()*100+'vw';e.style.top='-15px';e.style.setProperty('--x',(Math.random()*400-200)+'px');e.style.background=['#f0a8cf','#b9b0ff','#fff','#f6d28c'][Math.floor(Math.random()*4)];document.body.appendChild(e);setTimeout(()=>e.remove(),3100)}}
+
+let ctxAudio=null,masterGain=null,musicTimer=null,musicPlaying=false,noteIndex=0;
+let dangerMusicTimer=null,dangerMode=false,currentSoundMode='main';
+let activeOscillators=[];
+const melody=[261.63,329.63,392,523.25,392,329.63,293.66,349.23,440,523.25,440,349.23,261.63,329.63,392,493.88];
+function ensureAudio(){
+ if(!ctxAudio)ctxAudio=new(window.AudioContext||window.webkitAudioContext)();
+ if(ctxAudio.state==='suspended')ctxAudio.resume();
+ if(!masterGain){masterGain=ctxAudio.createGain();masterGain.gain.value=0;masterGain.connect(ctxAudio.destination)}
+}
+function stopActiveOscillators(){
+ activeOscillators.forEach(o=>{try{o.stop()}catch(e){}});activeOscillators=[];
+}
+function stopAllMusic({mute=true}={}){
+ musicPlaying=false;dangerMode=false;
+ clearTimeout(musicTimer);clearTimeout(dangerMusicTimer);
+ stopActiveOscillators();
+ if(mute&&masterGain&&ctxAudio)masterGain.gain.setTargetAtTime(0,ctxAudio.currentTime,.08);
+}
+function startMusic(){
+ ensureAudio();stopAllMusic({mute:false});currentSoundMode='main';musicPlaying=true;
+ masterGain.gain.setTargetAtTime(.045,ctxAudio.currentTime,.25);
+ document.getElementById('musicButton').textContent='♪ SONANDO';playNote();
+}
+function playNote(){
+ if(!musicPlaying||dangerMode)return;
+ let o=ctxAudio.createOscillator(),g=ctxAudio.createGain(),n=melody[noteIndex++%melody.length];
+ o.type='sine';o.frequency.value=n;g.gain.setValueAtTime(.001,ctxAudio.currentTime);g.gain.exponentialRampToValueAtTime(.45,ctxAudio.currentTime+.08);g.gain.exponentialRampToValueAtTime(.001,ctxAudio.currentTime+1.8);
+ o.connect(g);g.connect(masterGain);activeOscillators.push(o);o.onended=()=>{activeOscillators=activeOscillators.filter(a=>a!==o)};o.start();o.stop(ctxAudio.currentTime+1.9);musicTimer=setTimeout(playNote,520);
+}
+function toggleMusic(){
+ if(musicPlaying||dangerMode){stopAllMusic();document.getElementById('musicButton').textContent='♪ SONIDO';return}
+ if(currentSoundMode==='danger')switchDangerMusic();else startMusic();
+}
+function enterUniverse(){startMusic();const i=document.getElementById('intro');i.style.opacity='0';i.style.visibility='hidden';burst(55)}
+const cursor=document.getElementById('cursorGlow');addEventListener('pointermove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px'});
+function burst(n=35){for(let i=0;i<n;i++){let s=document.createElement('i');s.className='spark';s.textContent=['✦','✧','·','⋆'][Math.floor(Math.random()*4)];s.style.left=(50+Math.random()*10-5)+'vw';s.style.top=(45+Math.random()*10-5)+'vh';s.style.setProperty('--sx',(Math.random()*420-210)+'px');s.style.setProperty('--sy',(Math.random()*420-210)+'px');document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}}
+const observer=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.15});document.querySelectorAll('.glass,.moment,.word,.letter,.title').forEach(e=>{e.classList.add('revealOn');observer.observe(e)});
+document.querySelectorAll('.glass,.moment,.word').forEach(card=>{card.classList.add('tilt');card.addEventListener('pointermove',e=>{if(matchMedia('(hover: none)').matches)return;let r=card.getBoundingClientRect(),rx=(e.clientY-r.top-r.height/2)/(r.height/2),ry=(e.clientX-r.left-r.width/2)/(r.width/2);card.style.transform=`perspective(900px) rotateX(${-rx*3}deg) rotateY(${ry*3}deg) translateY(-4px)`});card.addEventListener('pointerleave',()=>card.style.transform='')});
+function openDanger(){
+ document.body.classList.add('danger-open');
+ document.getElementById('dangerText').style.display='block';
+ burst(120);switchDangerMusic();
+ window.scrollTo({top:document.querySelector('.danger-zone').offsetTop,behavior:'smooth'});
+}
+function switchDangerMusic(){
+ ensureAudio();
+ // Detiene la melodía anterior y sus notas activas antes de iniciar la nueva.
+ stopAllMusic({mute:false});currentSoundMode='danger';dangerMode=true;
+ const bass=[130.81,155.56,174.61,196,174.61,146.83,130.81,164.81,196,220,196,164.81];let i=0;
+ masterGain.gain.setTargetAtTime(.075,ctxAudio.currentTime,.35);
+ function playDanger(){
+  if(!dangerMode)return;
+  const now=ctxAudio.currentTime,osc=ctxAudio.createOscillator(),g=ctxAudio.createGain();
+  osc.type='triangle';osc.frequency.value=bass[i++%bass.length];
+  g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(.32,now+.15);g.gain.exponentialRampToValueAtTime(.001,now+2.3);
+  osc.connect(g);g.connect(masterGain);activeOscillators.push(osc);osc.onended=()=>{activeOscillators=activeOscillators.filter(a=>a!==osc)};osc.start();osc.stop(now+2.4);dangerMusicTimer=setTimeout(playDanger,900);
+ }
+ playDanger();document.getElementById('musicButton').textContent='♪ SONANDO';
+}
+</script>
+</body>
+</html>
